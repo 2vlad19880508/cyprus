@@ -1,7 +1,369 @@
 <?php
 /**
  * The template for displaying all single posts and attachments
+ *<?php
+/**
+ * The template for displaying all single posts and attachments
  *
+ * @package WordPress
+ * @subpackage Twenty_Fifteen
+ * @since Twenty Fifteen 1.0
+ */
+global $post;
+get_header('cart-singl'); ?>
+
+<div class="main topmain">
+    <div class="container">
+
+        <div id="notification"></div>
+
+        <div id="content" class="info_page">
+            <div class="breadcrumb">
+			<?php $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>
+                <a href="<?php echo get_home_url(); ?>"><i class="fa fa-home"></i>Home</a> &raquo; <?php if (strpos($url, '/nezhiloj-fond/') !== false) { ?> &raquo; <a href="/en/nezhiloj-fond/"> Commercial fund</a><?php } elseif (strpos($url, '/apartamenti-i-kvartiri/') !== false) { ?> <a href="/en/apartamenti-i-kvartiri/"> Apartments</a><?php } else { ?> &raquo;<a href="/en/doma-i-villi/"> Houses and Villas</a> <?php } ?>
+                &raquo; <?php the_title(); ?>
+            </div>
+
+            <p>
+                <style type="text/css">
+                    v\:* {
+                        behavior: url(#default#VML);
+                    }
+
+                    o\:* {
+                        behavior: url(#default#VML);
+                    }
+
+                    w\:* {
+                        behavior: url(#default#VML);
+                    }
+
+                    .shape {
+                        behavior: url(#default#VML);
+                    }
+					@media (max-width: 480px) {
+						.product__overlay {height:290px;}
+						.product-grid div .btn {
+						margin-left: -140px;
+					}
+					.mobis {
+						display:none;
+						
+					}
+					.pcb {
+						display:block;
+					}					
+					}
+					@media (min-width: 480px) {
+					.pcb {
+						display:none;
+					}
+					}
+					
+                </style>
+                <!--StartFragment-->
+            </p>
+
+            <?php while ( have_posts() ) : the_post(); ?>
+
+                <div id="content">
+                    <div class="product-info">
+                        <?php $slides = carbon_get_the_post_meta( 'n_images' ); ?>
+                        <?php if(!empty($slides )): ?>
+                            <div class="left">
+                                <div class="slider-for-cover">
+                                    <div class="slick-slider slider-for">
+                                        <?php foreach ( $slides as $slide): ?>
+                                            <div class="slick-slide slick-slide-for">
+                                                <a class="js_slide_img" href="<?php echo $slide['n_img']; ?>"></a>
+                                                <img style="max-width: 100%;" src="<?php echo $slide['n_img']; ?>"
+                                                title="<?php the_title(); ?>"
+                                                alt="<?php the_title(); ?>">
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+
+                                <div class="slider-nav-cover">
+                                    <div class="slick-slider slider-nav">
+                                        <?php $i= 0; foreach ( $slides as $slide): ?>
+                                        <div class="slick-slide" data-index="<?php echo $i; ?>">
+                                            <div class="slick-slide-img-cover">
+                                                <img style="width:90px;height: 72px;" src="<?php echo $slide['n_img']; ?>" title="" alt="" >
+                                            </div>
+                                        </div>
+                                        <?php $i++; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+                        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+                    <?php endif; ?>
+
+                    <div class="right">
+                        <div class="general_info">
+                        <h1><?php
+                            $price = carbon_get_post_meta( get_the_ID(), 'price' );
+                            $model = carbon_get_post_meta( get_the_ID(), 'model' );
+                            the_title();
+                            ?> - <div class="pcb"><br></div>
+							 <?php
+									$pricesale = carbon_get_post_meta( get_the_ID(), 'pricesale' );
+                                    if ($pricesale != '') {
+                                       ?>                            
+                                        <span style="color:grey;"><strike><?php $pricesale2 = number_format($pricesale, 0, ' ', ' '); echo $pricesale2; ?> € </strike></span>
+									<?php } ?>  
+									
+								<?php $price = number_format($price, 0, ' ', ' ');
+                                        echo $price.' €'; ?>
+										
+										 <?php		
+									$price2	=  carbon_get_post_meta( get_the_ID(), 'price' );								 
+                                    if ($pricesale != '') {
+                                        $procent = ($pricesale - $price2) * 100 / $pricesale;										
+										?>                            
+                                        <span style="color:#59AD3E;">Sale <?php echo round($procent); ?> %</span>      
+                                    <?php } ?>
+                            <div class="fast mobis" style="float:right;">
+                                <a class="callme button fastorder" href="#win1" data-name="<?php
+                                the_title();
+                                ?>" style="text-align: center;">CONSULTATION</a>
+                            </div>
+                        </h1>
+							<div class="pcb">
+							
+                                <a class="callme button fastorder" href="#win1" data-name="<?php
+                                the_title();
+                                ?>" style="text-align: center;">CONSULTATION</a>
+                            </div>
+                        <p class="mobis"> Model - <?php echo $model; ?></p>
+					<?php $best = get_post_meta(get_the_ID(), '_best', true); if( $best !== '2' ){ ?>
+		
+		<?php } else { ?>
+		<img src="<?php bloginfo('template_directory')?>/image/best.png">
+		<?php } ?>
+		<?php $new = get_post_meta(get_the_ID(), '_new', true); if( $new !== '2' ){ ?>
+		
+		<?php } else { ?>
+		<img src="<?php bloginfo('template_directory')?>/image/new.png">
+		<?php } ?>
+		
+			<?php $sale = get_post_meta(get_the_ID(), '_sale', true); if( $sale !== '2' ){ ?>
+		
+		<?php } else { ?>
+		<img src="<?php bloginfo('template_directory')?>/image/sale.png">
+		<?php } ?>
+		
+		<?php $sale = get_post_meta(get_the_ID(), '_bestprice', true); if( $sale !== '2' ){ ?>
+		<?php } else { ?>
+		<img src="<?php bloginfo('template_directory')?>/image/bestprice.png">
+		<?php } ?>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="tabs" class="htabs"><a href="#tab-description" class="selected" style="display: inline;">Description</a>
+                    <a href="#tab-attribute" style="display: inline;">Specification</a>
+
+                </div>
+
+                <div id="tab-description" class="tab-content" style="display: block;">
+                    <?php echo the_content (); ?>
+                </div>
+
+                <div id="tab-attribute" class="tab-content" style="display: none;">
+                    <?php
+                    $opt_table =  carbon_get_the_post_meta( 'opt_table' );
+                    echo $opt_table;
+                    ?>
+                </div>
+                <div id="tab-review" class="tab-content" style="display: none;">
+                    <?php
+                    echo comment_form();
+
+                    $args = array(
+                        'number' => '',
+                        'orderby' => 'comment_date',
+                        'order' => 'DESC',
+                        'status' => 'approve',
+                        'type' => '',
+                    );
+
+                    if( $comments = get_comments( $args ) ){
+                        echo '<div class="comments__title">Список отзывов:</div><ul class="comments__list">';
+                        foreach( $comments as $comment ){
+                $comm_link = get_comment_link( $comment->comment_ID ); // может быть тяжелый запрос ...
+
+                echo '<li>
+                <span class="comment__author">'. $comment->comment_author .':</span>
+                <span class="comment__text">'.$comment->comment_content.'</span>
+                </li>';
+            }
+            echo '</ul>';
+        }
+        ?>
+    </div>
+
+    <div class="maps-cover">
+        <?php echo carbon_get_the_post_meta('map'); ?>
+    </div>
+
+
+</div>
+<?php endwhile; ?>
+
+		<?php if (strpos($url, '/nezhiloj-fond/') !== false) { ?>
+			<center>  <a href="/en/nezhiloj-fond/" class="blog-record2">Return to the list of objects</a></center>
+		<?php } elseif (strpos($url, '/apartamenti-i-kvartiri/') !== false) { ?>
+			<center>  <a href="/en/apartamenti-i-kvartiri/" class="blog-record2">Return to the list of objects</a></center>
+		<?php } else  { ?>
+			<center>  <a href="/en/doma-i-villi/" class="blog-record2">Return to the list of objects</a></center>
+		<?php } ?>
+
+<center><h3 style="font-size:24px; margin:40px 0 20px 0;">RELATED OBJECTS:</h3></center>
+ <div class="product-list-imgs js_pd_list product-grid">
+<?php
+// если это старица отдельной записи
+	global $post;
+	$taxname = 'nedvijimostj'; // таксономия с которой будем работать
+
+	// получим ID всех рубрик поста
+	$post_terms = wp_get_post_terms( $post->ID, $taxname);
+
+	?>
+
+		<?php
+        $mid = get_post_meta(get_queried_object()->ID, '_price')[0]/2;
+
+        $min = get_post_meta(get_queried_object()->ID, '_price')[0] - $mid;
+        $max = get_post_meta(get_queried_object()->ID, '_price')[0] + $mid;
+
+        if(!$post_terms[1]->term_id) $term_list = $post_terms[0]->term_id;
+        else $term_list = $post_terms[1]->term_id;
+		$the_query = new WP_Query(
+            array(
+                   'posts_per_page' => 4,
+                   'post__not_in' => array($post->ID),
+                   'post_type'=> 'nedvijimost',
+
+                    'meta_query' => array(
+                        array(
+                            'key'     => '_price',
+                            'value'   => array($min, $max),
+                            'compare' => 'BETWEEN',
+                            'type' => 'NUMERIC'
+                        ),
+                    ),
+                   'tax_query' => array(
+                    array(
+                        'taxonomy' => 'nedvijimostj',
+                        'field'    => 'term_id',
+                        'terms'    => $post_terms[0]->term_id,
+                    ),
+                ),
+
+            )
+         );
+        if(!$the_query->post_count || $the_query->post_count < 4) {
+            $mid = get_post_meta(get_queried_object()->ID, '_price')[0]/4;
+
+            $min = (get_post_meta(get_queried_object()->ID, '_price')[0] - $mid) / 2;
+            $max = get_post_meta(get_queried_object()->ID, '_price')[0] + $mid;
+            $the_query = new WP_Query(
+                array(
+                    'posts_per_page' => 4,
+                    'post__not_in' => array($post->ID),
+                    'post_type'=> 'nedvijimost',
+
+                    'meta_query' => array(
+                        array(
+                            'key'     => '_price',
+                            'value'   => array($min, $max),
+                            'compare' => 'BETWEEN',
+                            'type' => 'NUMERIC'
+                        ),
+                    ),
+                    'tax_query' => array(
+                        array(
+                            'taxonomy' => 'nedvijimostj',
+                            'field'    => 'term_id',
+                            'terms'    => $post_terms[0]->term_id,
+                        ),
+                    ),
+
+                )
+            );
+        }
+ 
+        
+     ?>
+
+     <?php if ( $the_query->have_posts() ) : while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+
+
+                <!-- items -->
+                                                        <div class="item has_thumb ">
+                        <div class="left">
+                            <div class="sticker-img"></div>
+                            <div class="image">
+
+                                <a href="<?php the_permalink(); ?>">
+                                    <img src="<?php the_post_thumbnail_url(); ?>" width=200px class="attachment-150x100 size-150x100 wp-post-image" alt="" />                                </a>
+                                <div class="product__overlay">
+
+                                    <a href="<?php the_permalink(); ?>" class="btn btn-md btn-primary link--no-line button--nina"
+                                        data-text="Read more">
+                                        <span>R</span><span>e</span><span>a</span><span>d</span><span> </span><span>m</span><span>o</span><span>r</span><span>e</span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="centr">
+                            <div class="name">
+                              <a href="<?php the_permalink(); ?>"><?php the_title(); ?>
+
+	   </a>
+                                </div>
+                                <div class="price">
+                                    <?php
+                                    $price = get_post_meta(get_the_ID(), '_price')[0];
+                                    if ($price != '') {
+                                        $price = number_format($price, 0, ' ', ' ');
+                                        echo $price.' €'; 
+                                    }
+                                    ?>                            </div>
+                                <div class="description">
+                                                                        <div class="read_product">
+                                        <a href="<?php the_permalink(); ?>">Read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="hover_but"></div>
+                            </div>
+                        </div>
+ <script type="text/javascript">
+</script>
+
+
+
+   <?php endwhile; ?>
+<?php endif; ?>
+
+
+</div>
+
+</div>
+</div>
+</div>
+</main>
+
+<?php get_footer(); ?>
  * @package WordPress
  * @subpackage Twenty_Fifteen
  * @since Twenty Fifteen 1.0
